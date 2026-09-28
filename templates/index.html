@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiki's Wellness Nook 🌿</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f4f0ea;
+            --card-bg: #fffdf9;
+            --primary: #5c7829;
+            --primary-hover: #48601e;
+            --accent: #e8a87c;
+            --text-dark: #3e3b32;
+            --text-muted: #7d786d;
+            --border-color: #e2dad0;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 780px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 2px solid var(--border-color);
+            padding: 28px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-container {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 10px auto;
+            background: #eaf0e6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--primary);
+        }
+
+        .logo-svg {
+            width: 48px;
+            height: 48px;
+        }
+
+        h1 {
+            font-family: 'Fredoka', sans-serif;
+            color: var(--primary-hover);
+            margin: 0;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: #ede8df;
+            color: var(--text-dark);
+            font-family: 'Fredoka', sans-serif;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .card-box {
+            background: #fdfbf7;
+            border: 2px solid var(--border-color);
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .model-card {
+            border: 2px solid var(--border-color);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            background: #fff;
+            transition: all 0.2s ease;
+        }
+
+        .model-card:hover, .model-card.selected {
+            border-color: var(--primary);
+            background: #f4f8f0;
+        }
+
+        .select-dropdown {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            font-family: 'Nunito', sans-serif;
+            margin-top: 8px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+        }
+
+        .progress-bar-container {
+            height: 10px;
+            background: #ede8df;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-option {
+            padding: 12px 20px;
+            border: 2px solid var(--border-color);
+            background: #fff;
+            color: var(--text-dark);
+            border-radius: 12px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .btn-option:hover {
+            border-color: var(--primary);
+            background: #f4f8f0;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 14px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+
+        .btn-yes { background: var(--primary); color: white; }
+        .btn-no { background: #d98880; color: white; }
+
+        .disorder-bar { margin-bottom: 16px; }
+
+        .bar-outer {
+            background: #ede8df;
+            border-radius: 10px;
+            height: 22px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+
+        .bar-inner {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.6s ease;
+        }
+
+        .ai-box {
+            background: #f4ece1;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+
+        /* --- Chat UI Styles --- */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 400px;
+        }
+
+        .chat-box {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .chat-message {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .chat-message.user {
+            align-self: flex-end;
+            background-color: var(--primary);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-message.bot {
+            align-self: flex-start;
+            background-color: #f0ede6;
+            color: var(--text-dark);
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="logo-container">
+            <svg class="logo-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M32 8C18.7 8 8 18.7 8 32C8 45.3 18.7 56 32 56C45.3 56 56 45.3 56 32C56 18.7 45.3 8 32 8Z" fill="#88b04b"/>
+                <path d="M32 14C24 22 20 32 20 44C32 44 42 40 50 32C42 22 32 14 32 14Z" fill="#a0c860"/>
+                <path d="M32 14C32 28 26 40 14 48C24 48 38 42 44 32C38 22 32 14 32 14Z" fill="#608828"/>
+                <circle cx="26" cy="28" r="3" fill="#ffffff"/>
+                <circle cx="38" cy="28" r="3" fill="#ffffff"/>
+                <circle cx="26" cy="28" r="1.5" fill="#3e3b32"/>
+                <circle cx="38" cy="28" r="1.5" fill="#3e3b32"/>
+            </svg>
+        </div>
+        <h1>Kiki's Sanctuary</h1>
+        <p style="color: var(--text-muted); margin-top: 4px;">Mental Health Screening & Evaluation Hub</p>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('tab-screener', event)">🔍 Screening Models</button>
+        <button class="tab-btn" onclick="switchTab('tab-breathing', event)">🫁 Breathing</button>
+        <button class="tab-btn" onclick="switchTab('tab-chat', event)">🤖 Companion</button>
+    </div>
+
+    <!-- TAB 1: SCREENER -->
+    <div id="tab-screener" class="tab-content active">
+        <!-- Selection Stage -->
+        <div id="model-selection-box" class="card-box">
+            <h2 style="margin-top:0;">Select Model Approach</h2>
+            
+            <div class="model-card selected" id="card-kaggle" onclick="selectModel('kaggle')">
+                <input type="radio" name="model_choice" id="radio-kaggle" checked>
+                <label for="radio-kaggle" style="font-weight:700; cursor:pointer;"> Model 1: Multi-Disorder ML Model (27 Symptoms)</label>
+                <p style="margin: 6px 0 0 24px; color: var(--text-muted); font-size: 0.9rem;">
+                    Uses Random Forest ML to predict symptom profile matches across disorders.
+                </p>
+            </div>
+
+            <div class="model-card" id="card-clinical" onclick="selectModel('clinical')">
+                <input type="radio" name="model_choice" id="radio-clinical">
+                <label for="radio-clinical" style="font-weight:700; cursor:pointer;"> Model 2: Clinical Rating Scales (from data.csv)</label>
+                <p style="margin: 6px 0 0 24px; color: var(--text-muted); font-size: 0.9rem;">
+                    Uses validated diagnostic screeners (ASRS v1.1, PHQ-9, GAD-7, OCI-R, PCL-5).
+                </p>
+            </div>
+
+            <div id="category-selector-container" style="display: none; margin-top: 16px;">
+                <label for="clinical-key" style="font-weight: 600;">Select Diagnostic Framework Scale:</label>
+                <select id="clinical-key" class="select-dropdown">
+                    {% for key in clinical_keys %}
+                        <option value="{{ key }}">{{ key }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button class="btn btn-yes" style="width: 100%; margin-top: 12px;" onclick="startSelectedAssessment()">Begin Assessment</button>
+        </div>
+
+        <!-- Question Stage -->
+        <div id="screener-flow" class="card-box" style="display: none;">
+            <div class="progress-bar-container">
+                <div id="progress" class="progress-bar"></div>
+            </div>
+
+            <div>
+                <span id="question-number" style="font-size: 0.85rem; color: var(--text-muted);">Question 1</span>
+                <h2 id="question-text" style="margin: 16px 0; color: var(--text-dark);">Loading question...</h2>
+
+                <div id="options-container" class="options-grid"></div>
+            </div>
+        </div>
+
+        <!-- Result Stage -->
+        <div id="screener-result" class="card-box" style="display: none;">
+            <h2>🌸 Assessment Results</h2>
+            <div id="disorder-results"></div>
+
+            <button class="btn btn-yes" style="width: 100%; margin-top: 16px;" onclick="fetchInsight()">✨ View Diagnostic Insight</button>
+
+            <div id="ai-insight-box" class="ai-box" style="display: none;">
+                <h3 style="margin-top:0;">🤖 Companion Breakdown</h3>
+                <p id="ai-insight-text">Generating insight...</p>
+            </div>
+
+            <button class="btn btn-no" style="width: 100%; margin-top: 12px;" onclick="resetScreener()">Retake Assessment</button>
+        </div>
+    </div>
+
+    <!-- TAB 2: BREATHING -->
+    <div id="tab-breathing" class="tab-content">
+        <div class="card-box" style="text-align: center;">
+            <h2>🫁 Box Breathing</h2>
+            <p style="color: var(--text-muted);">Inhale (4s) — Hold (4s) — Exhale (4s) — Pause (4s)</p>
+            <div id="breathing-circle" style="width: 120px; height: 120px; border-radius: 50%; background: var(--accent); margin: 20px auto; transition: transform 4s ease-in-out;"></div>
+            <button class="btn btn-yes" onclick="startBreathing()">Start Exercise</button>
+        </div>
+    </div>
+
+     <!-- TAB 3: CHATBOT -->
+
+    <div id="tab-chat" class="tab-content">
+        <div class="card-box chat-container">
+            <div id="chat-messages" class="chat-box">
+                <div class="chat-message bot">
+                    Hello! I'm Kiki, your AI companion. How are you feeling today?
+                </div>
+            </div>
+            <div class="chat-input-row">
+                <input type="text" id="chat-input" class="chat-input" placeholder="Talk to Kiki..." onkeydown="if(event.key === 'Enter') sendChatMessage();">
+                <button class="btn btn-yes" onclick="sendChatMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const kaggleQuestions = [
+        "Do you frequently feel unusually nervous or on edge?",
+        "Do you experience sudden episodes of panic?",
+        "Do you notice your breathing becoming rapid during stress?",
+        "Do you experience excessive sweating unassociated with heat?",
+        "Do you struggle to maintain concentration on daily tasks?",
+        "Do you frequently have trouble falling or staying asleep?",
+        "Are symptoms interfering with your work or study performance?",
+        "Do you often experience feelings of hopelessness?",
+        "Do you find yourself experiencing frequent anger?",
+        "Do you feel you tend to overreact to minor stressors?",
+        "Have you experienced noticeable changes in eating habits?",
+        "Have you had persistent unwanted or dark thoughts?",
+        "Do you feel persistently fatigued or tired?",
+        "Do you struggle to feel close to friends or family?",
+        "Do you feel overly reliant or addicted to social media?",
+        "Have you experienced unexplained weight changes?",
+        "Do you feel strongly introverted or withdrawn?",
+        "Do stressful memories repeatedly pop into your mind?",
+        "Do you experience frequent distressing nightmares?",
+        "Do you actively avoid certain people, places, or activities?",
+        "Do you regularly experience persistent negative thoughts?",
+        "Do you struggle with memory or focus under pressure?",
+        "Do you often find yourself blaming yourself excessively?",
+        "Have you ever experienced visions or sensory hallucinations?",
+        "Do you engage in repetitive behaviors or compulsions?",
+        "Does your mood change significantly with seasonal weather?",
+        "Do you experience sudden periods of unusually high energy?"
+    ];
+
+    let activeQuestions = [];
+    let currentQ = 0;
+    let userAnswers = [];
+    let chosenModelMode = 'kaggle';
+    let selectedScaleTitle = '';
+    let summaryResult = null;
+
+    function switchTab(tabId, evt) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        evt.target.classList.add('active');
+    }
+
+    function selectModel(mode) {
+        chosenModelMode = mode;
+        document.getElementById('radio-kaggle').checked = (mode === 'kaggle');
+        document.getElementById('radio-clinical').checked = (mode === 'clinical');
+        document.getElementById('card-kaggle').classList.toggle('selected', mode === 'kaggle');
+        document.getElementById('card-clinical').classList.toggle('selected', mode === 'clinical');
+        document.getElementById('category-selector-container').style.display = (mode === 'clinical') ? 'block' : 'none';
+    }
+
+    async function startSelectedAssessment() {
+        userAnswers = [];
+        currentQ = 0;
+
+        if (chosenModelMode === 'kaggle') {
+            activeQuestions = kaggleQuestions.map(q => ({
+                text: q,
+                options: [
+                    { label: "Yes, often", score: 1 },
+                    { label: "No, rarely", score: 0 }
+                ]
+            }));
+            runQuestionnaire();
+        } else {
+            selectedScaleTitle = document.getElementById('clinical-key').value;
+            const res = await fetch('/get_clinical_questions', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ key: selectedScaleTitle })
+            });
+            const data = await res.json();
+            activeQuestions = data.questions;
+            runQuestionnaire();
+        }
+    }
+
+    function runQuestionnaire() {
+        document.getElementById('model-selection-box').style.display = 'none';
+        document.getElementById('screener-flow').style.display = 'block';
+        renderQuestion();
+    }
+
+    function renderQuestion() {
+        const q = activeQuestions[currentQ];
+        document.getElementById('question-number').innerText = `Question ${currentQ + 1} of ${activeQuestions.length}`;
+        document.getElementById('question-text').innerText = q.text;
+        document.getElementById('progress').style.width = `${((currentQ + 1) / activeQuestions.length) * 100}%`;
+
+        const optsContainer = document.getElementById('options-container');
+        optsContainer.innerHTML = '';
+
+        q.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-option';
+            btn.innerText = opt.label;
+            btn.onclick = () => answerQuestion(opt.score);
+            optsContainer.appendChild(btn);
+        });
+    }
+
+    function answerQuestion(score) {
+        userAnswers.push(score);
+        currentQ++;
+        if (currentQ < activeQuestions.length) {
+            renderQuestion();
+        } else {
+            submitAssessment();
+        }
+    }
+
+    async function submitAssessment() {
+        document.getElementById('screener-flow').style.display = 'none';
+        document.getElementById('screener-result').style.display = 'block';
+        const resultsContainer = document.getElementById('disorder-results');
+        resultsContainer.innerHTML = '<p>Processing predictions...</p>';
+
+        if (chosenModelMode === 'kaggle') {
+            try {
+                const res = await fetch('/predict_disorder', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ responses: userAnswers })
+                });
+
+                const data = await res.json();
+                
+                if (data.error) {
+                    resultsContainer.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
+                    return;
+                }
+
+                resultsContainer.innerHTML = '';
+                summaryResult = { 
+                    top_disorder: data.predictions[0].disorder, 
+                    score: data.predictions[0].probability, 
+                    max_score: 100, 
+                    percentage: data.predictions[0].probability 
+                };
+
+                data.predictions.forEach(item => {
+                    resultsContainer.innerHTML += `
+                        <div class="disorder-bar">
+                            <div style="display: flex; justify-content: space-between; font-weight: 600;">
+                                <span>${item.disorder}</span>
+                                <span>${item.probability}%</span>
+                            </div>
+                            <div class="bar-outer">
+                                <div class="bar-inner" style="width: ${item.probability}%;"></div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                resultsContainer.innerHTML = `<p style="color:red;">Failed to get predictions: ${err}</p>`;
+            }
+        } else {
+            const totalScore = userAnswers.reduce((a, b) => a + b, 0);
+            const maxPerQ = Math.max(...activeQuestions[0].options.map(o => o.score));
+            const maxPossible = activeQuestions.length * maxPerQ;
+            const percentage = Math.round((totalScore / maxPossible) * 100);
+
+            summaryResult = { 
+                top_disorder: selectedScaleTitle, 
+                score: totalScore, 
+                max_score: maxPossible, 
+                percentage: percentage 
+            };
+
+            resultsContainer.innerHTML = `
+                <h3>${selectedScaleTitle} Score</h3>
+                <p>Total Assessment Score: <strong>${totalScore} / ${maxPossible} (${percentage}%)</strong></p>
+                <div class="bar-outer">
+                    <div class="bar-inner" style="width: ${percentage}%;"></div>
+                </div>
+            `;
+        }
+    }
+
+    async function fetchInsight() {
+        if (!summaryResult) return;
+        document.getElementById('ai-insight-box').style.display = 'block';
+        
+        const res = await fetch('/disorder_insights', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(summaryResult)
+        });
+
+        const data = await res.json();
+        document.getElementById('ai-insight-text').innerText = data.insight;
+    }
+
+    function resetScreener() {
+        document.getElementById('screener-result').style.display = 'none';
+        document.getElementById('ai-insight-box').style.display = 'none';
+        document.getElementById('model-selection-box').style.display = 'block';
+    }
+
+    function startBreathing() {
+        const circle = document.getElementById('breathing-circle');
+        circle.style.transform = 'scale(1.6)';
+        setTimeout(() => circle.style.transform = 'scale(1)', 4000);
+    }
+
+    // --- Chatbot Functionality ---
+    // Array to keep track of message history in memory
+// Local chat memory (Does not interfere with screener variables)
+let chatHistory = [];
+
+async function sendChatMessage() {
+    const input = document.getElementById('chat-input');
+    const userMessage = input.value.trim();
+    if (!userMessage) return;
+
+    const chatBox = document.getElementById('chat-messages');
+
+    // Display user message in UI
+    const userDiv = document.createElement('div');
+    userDiv.style.cssText = "align-self: flex-end; background-color: var(--primary); color: white; padding: 10px 14px; border-radius: 16px; font-size: 0.95rem; max-width: 80%; margin-bottom: 8px;";
+    userDiv.innerText = userMessage;
+    chatBox.appendChild(userDiv);
+
+    input.value = '';
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    try {
+        const response = await fetch('/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: userMessage,
+                history: chatHistory
+            })
+        });
+
+        const data = await response.json();
+
+        // Display bot response in UI
+        const botDiv = document.createElement('div');
+        botDiv.style.cssText = "align-self: flex-start; background-color: #f0ede6; color: var(--text-dark); padding: 10px 14px; border-radius: 16px; font-size: 0.95rem; max-width: 80%; margin-bottom: 8px;";
+        botDiv.innerText = data.reply || "Sorry, I couldn't generate a response.";
+        chatBox.appendChild(botDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Keep local memory updated
+        chatHistory.push({ role: 'user', text: userMessage });
+        if (data.reply) {
+            chatHistory.push({ role: 'model', text: data.reply });
+        }
+    } catch (err) {
+        console.error('Chat error:', err);
+        const errDiv = document.createElement('div');
+        errDiv.style.cssText = "align-self: flex-start; background-color: #f8d7da; color: #721c24; padding: 10px 14px; border-radius: 16px; font-size: 0.95rem;";
+        errDiv.innerText = 'Unable to connect to the chatbot server.';
+        chatBox.appendChild(errDiv);
+    }
+}
+
+</script>
+
+</body>
+</html>
